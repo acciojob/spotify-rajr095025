@@ -210,47 +210,52 @@ public class SpotifyRepository {
         //If the user does not exist, throw "User does not exist" exception
         //If the song does not exist, throw "Song does not exist" exception
         //Return the song after updating
-        User user = null;
-        for(User userTemp : users){
-            if(userTemp.getMobile() == mobile){
-                user = userTemp;
+        try {
+            User user = null;
+            for (User userTemp : users) {
+                if (userTemp.getMobile() == mobile) {
+                    user = userTemp;
+                }
             }
-        }
-        if(user == null){
-            throw new Exception("User does not exist");
-        }
-        Song song = null;
-        for(Song songTemp : songs){
-            if(songTemp.getTitle() == songTitle){
-                song = songTemp;
+            if (user == null) {
+                throw new Exception("User does not exist");
             }
+            Song song = null;
+            for (Song songTemp : songs) {
+                if (songTemp.getTitle() == songTitle) {
+                    song = songTemp;
+                }
+            }
+            if (song == null) {
+                throw new Exception("Song does not exist");
+            }
+            List<User> userList = songLikeMap.get(song);
+            if (userList != null && userList.contains(user)) {
+                return song;
+            }
+            song.setLikes(song.getLikes() + 1);
+            Album album = null;
+            for (Album albumTemp : albumSongMap.keySet()) {
+                if (albumSongMap.get(albumTemp).contains(song)) {
+                    album = albumTemp;
+                }
+            }
+            if (album == null) {
+                return song;
+            }
+            Artist artist = null;
+            for (Artist artistTemp : artistAlbumMap.keySet()) {
+                if (artistAlbumMap.get(artistTemp).contains(album)) {
+                    artist = artistTemp;
+                }
+            }
+            artist.setLikes(artist.getLikes() + 1);
+            return song;
         }
-        if(song == null){
-            throw new Exception("Song does not exist");
+        catch (Exception e){
+            throw new Exception();
         }
-        List<User> userList = songLikeMap.get(song);
 
-        if(userList != null && userList.contains(user)){
-            return song;
-        }
-        song.setLikes(song.getLikes() + 1);
-        Album album = null;
-        for(Album albumTemp : albumSongMap.keySet()){
-            if(albumSongMap.get(albumTemp).contains(song)){
-                album = albumTemp;
-            }
-        }
-        if(album == null){
-            return song;
-        }
-        Artist artist = null;
-        for(Artist artistTemp : artistAlbumMap.keySet()){
-            if(artistAlbumMap.get(artistTemp).contains(album)){
-                artist = artistTemp;
-            }
-        }
-        artist.setLikes(artist.getLikes() + 1);
-        return song;
     }
 
     public String mostPopularArtist() throws Exception {
