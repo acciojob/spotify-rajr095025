@@ -229,7 +229,8 @@ public class SpotifyRepository {
             throw new Exception("Song does not exist");
         }
         List<User> userList = songLikeMap.get(song);
-        if(userList.contains(user)){
+
+        if(userList != null && userList.contains(user)){
             return song;
         }
         song.setLikes(song.getLikes() + 1);
@@ -252,26 +253,36 @@ public class SpotifyRepository {
         return song;
     }
 
-    public String mostPopularArtist() {
+    public String mostPopularArtist() throws Exception {
         int maxLikes = 0;
         String ans = "";
-        for(Artist artist : artists){
-            if(artist.getLikes() > maxLikes){
-                ans = artist.getName();
-                maxLikes = artist.getLikes();
+        try {
+            for (Artist artist : artists) {
+                if (artist.getLikes() >= maxLikes) {
+                    ans = artist.getName();
+                    maxLikes = artist.getLikes();
+                }
             }
+        }
+        catch (Exception e){
+            throw new Exception();
         }
         return ans;
     }
 
-    public String mostPopularSong() {
+    public String mostPopularSong() throws Exception {
         int maxLikes = 0;
         String ans = "";
-        for(Song song : songs){
-            if(song.getLikes() > maxLikes){
-                ans = song.getTitle();
-                maxLikes = song.getLikes();
+        try {
+            for (Song song : songs) {
+                if (song.getLikes() >= maxLikes) {
+                    ans = song.getTitle();
+                    maxLikes = song.getLikes();
+                }
             }
+        }
+        catch (Exception e){
+            throw new Exception();
         }
         return ans;
     }
