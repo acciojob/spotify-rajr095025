@@ -43,11 +43,11 @@ public class SpotifyService {
         return spotifyRepository.likeSong(mobile,songTitle);
     }
 
-    public String mostPopularArtist() {
+    public String mostPopularArtist() throws Exception {
         return spotifyRepository.mostPopularArtist();
     }
 
-    public String mostPopularSong() {
+    public String mostPopularSong() throws Exception {
         return spotifyRepository.mostPopularSong();
     }
 }
